@@ -1,0 +1,11 @@
+
+/src/config
+/vendor
+/logs/*
+!/logs/README.md
+
+configRoutes.php
+constConfig.php
+
+composer.json
+composer.lock
