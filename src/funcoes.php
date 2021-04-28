@@ -142,8 +142,8 @@ function getConection($config=null) {
 	return $conn->Connect();
 }
 
-function getMsmDebug($msm) { 
-	return toJson(new FalseDebug($msm));
+function getMsmDebug($msm, $toJson=false) { 
+	return $toJson ? toJson(new FalseDebug($msm)) : new FalseDebug($msm);
 }
 
 function getQuery($pdo, $sql) { 
