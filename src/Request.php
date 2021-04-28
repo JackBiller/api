@@ -8,15 +8,15 @@ class Request extends PadraoObjeto {
 			include __DIR__ . '/config/chave_api.php';
 			$chaveApi = new ChaveApi($pdo, $request->getHeaders());
 			if (!$chaveApi->isValid()) { 
-				$response->getBody()->write(json_encode(new FalseDebug($chaveApi->getDebug())));
-				return $response;
+				// $response->getBody()->write(json_encode(new FalseDebug($chaveApi->getDebug())));
+				return $response->withStatus(400)->withJson(new FalseDebug($chaveApi->getDebug()));
 			}
 		}
 		$paramUrl = $this->getParamUrl($request);
 		$key = $this->returnKeyPath($paramUrl);
 		if ($key == '') { 
-			$response->getBody()->write(json_encode(new FalseDebug('PATH not found')));
-			return $response;
+			// $response->getBody()->write(json_encode(new FalseDebug('PATH not found')));
+			return $response->withStatus(400)->withJson(new FalseDebug('PATH not found'));
 		}
 		$key = explode('?', $key)[0];
 		$this->setLog($container, $method." '/$key' route", $key);
@@ -32,9 +32,11 @@ class Request extends PadraoObjeto {
 		*/
 		$methodFunc = strtolower($method);
 		if (IS_CHAVE_API) { 
-			$response->getBody()->write($obj->$methodFunc($request, $response, $args, $container, $chaveApi));
+			$response = $obj->$methodFunc($request, $response, $args, $container, $chaveApi);
+			// $response->getBody()->write($obj->$methodFunc($request, $response, $args, $container, $chaveApi));
 		} else { 
-			$response->getBody()->write($obj->$methodFunc($request, $response, $args, $container));
+			$response = $obj->$methodFunc($request, $response, $args, $container);
+			// $response->getBody()->write($obj->$methodFunc($request, $response, $args, $container));
 		}
 		return $response;
 	}
