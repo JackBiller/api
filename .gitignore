@@ -9,3 +9,8 @@ constConfig.php
 
 composer.json
 composer.lock
+
+public/*
+
+!public/.htaccess
+!public/index.php
